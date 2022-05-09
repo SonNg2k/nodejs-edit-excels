@@ -1,0 +1,31 @@
+{
+  // See the TSConfig Bases here: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#tsconfig-bases
+  "compilerOptions": {
+    "lib": ["es2021"], // override the default libs injected by 'target'
+    "module": "commonjs",
+    "target": "es2021",
+
+    "strict": true,
+    "esModuleInterop": true, // without this, u have to do st like: import * as functions from "firebase-functions"
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true, // force casing specified in the import statement to be the same as casing on disk
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+
+    "moduleResolution": "Node", // "resolveJsonModule" cannot be specified without "node" module resolution strategy
+    "resolveJsonModule": true, // *.json files you want to import need to be inside of "rootDir"
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/*"]
+    },
+
+    "outDir": "lib",
+    "sourceMap": true
+  },
+  "compileOnSave": true,
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
