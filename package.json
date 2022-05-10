@@ -14,5 +14,8 @@
   "dependencies": {
     "rimraf": "^3.0.2",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.31"
   }
 }
