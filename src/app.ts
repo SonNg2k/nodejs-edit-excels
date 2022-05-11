@@ -1,5 +1,5 @@
 import { CellHyperlinkValue, Workbook } from "exceljs";
-import photos2020 from "./onedrive/2020-photos.json";
+import folders2020 from "./cloud-storage-folders/2020-folders.json";
 
 async function migrateToOneDrive(args: {
   bookName: string;
@@ -7,7 +7,7 @@ async function migrateToOneDrive(args: {
   col: string;
   sRow: number;
   eRow: number;
-  onedriveWebUrls: Array<string>;
+  folderWebUrls: Array<string>;
 }) {
   const workbook = new Workbook();
   await workbook.xlsx.readFile(`../excels/${args.bookName}`);
@@ -16,8 +16,8 @@ async function migrateToOneDrive(args: {
   for (let rowNth = args.sRow; rowNth <= args.eRow; rowNth++) {
     const cell = worksheet.getCell(args.col + rowNth);
     const newCellValue: CellHyperlinkValue = {
-      text: args.onedriveWebUrls[rowNth - args.sRow],
-      hyperlink: args.onedriveWebUrls[rowNth - args.sRow],
+      text: "Link " + (rowNth - args.sRow + 1),
+      hyperlink: args.folderWebUrls[rowNth - args.sRow],
     };
     cell.value = newCellValue;
   }
@@ -26,12 +26,12 @@ async function migrateToOneDrive(args: {
 }
 
 migrateToOneDrive({
-  bookName: "2020-customers.xlsx",
+  bookName: "2020 Customers.xlsx",
   sheetName: "2020",
   col: "M",
   sRow: 3,
   eRow: 108,
-  onedriveWebUrls: photos2020.value.map((folderInfo) => folderInfo.webUrl),
+  folderWebUrls: folders2020.files.map((folderInfo) => folderInfo.webViewLink),
 });
 
 // import { readFile, utils, writeFile } from "xlsx";
