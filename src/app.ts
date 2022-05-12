@@ -1,5 +1,6 @@
 import { CellHyperlinkValue, Workbook } from "exceljs";
-import folders2020 from "./cloud-storage-folders/2020-folders.json";
+import folders20 from "./cloud-storage-folders/2020-folders.json";
+import folders21 from "./cloud-storage-folders/2021-folders.json";
 
 async function migrateToOneDrive(args: {
   bookName: string;
@@ -22,7 +23,7 @@ async function migrateToOneDrive(args: {
     cell.value = newCellValue;
   }
   await workbook.xlsx.writeFile(`../excels/${args.bookName}`);
-  console.log("Migration Complete ✅");
+  console.log(`Migration for ${args.bookName} is complete ✅`);
 }
 
 migrateToOneDrive({
@@ -31,8 +32,33 @@ migrateToOneDrive({
   col: "M",
   sRow: 3,
   eRow: 108,
-  folderWebUrls: folders2020.files.map((folderInfo) => folderInfo.webViewLink),
+  folderWebUrls: folders20.files.map((folderInfo) => folderInfo.webViewLink),
 });
+
+const sortedWebUrls21 = folders21.files
+  .sort(
+    (a, b) =>
+      extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+  )
+  .map((folderInfo) => folderInfo.webViewLink);
+
+migrateToOneDrive({
+  bookName: "2021 Customers.xlsx",
+  sheetName: "2021",
+  col: "L",
+  sRow: 3,
+  eRow: 262,
+  folderWebUrls: sortedWebUrls21,
+});
+
+/// Only used for filenames that contains '(number)'
+function extractNumberFromFilename(filename: string): number {
+  const startIdx = filename.indexOf("(") + 1;
+  const endIdx = filename.indexOf(")");
+  const parsed = parseInt(filename.substring(startIdx, endIdx), 10);
+  if (isNaN(parsed)) return -1;
+  return parsed;
+}
 
 // import { readFile, utils, writeFile } from "xlsx";
 // const workbook2020 = readFile("../excels/2020-customers.xlsx", {
