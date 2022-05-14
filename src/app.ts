@@ -1,6 +1,7 @@
 import { CellHyperlinkValue, Workbook } from "exceljs";
 import folders20 from "./cloud-storage-folders/2020-folders.json";
 import folders21 from "./cloud-storage-folders/2021-folders.json";
+import folders22 from "./cloud-storage-folders/2022-folders.json";
 
 async function migrateToOneDrive(args: {
   bookName: string;
@@ -41,7 +42,6 @@ const sortedWebUrls21 = folders21.files
       extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
   )
   .map((folderInfo) => folderInfo.webViewLink);
-
 migrateToOneDrive({
   bookName: "2021 Customers.xlsx",
   sheetName: "2021",
@@ -49,6 +49,21 @@ migrateToOneDrive({
   sRow: 3,
   eRow: 262,
   folderWebUrls: sortedWebUrls21,
+});
+
+const sortedWebUrls22 = folders22.files
+  .sort(
+    (a, b) =>
+      extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+  )
+  .map((folderInfo) => folderInfo.webViewLink);
+migrateToOneDrive({
+  bookName: "2022 Customers.xlsx",
+  sheetName: "2022",
+  col: "K",
+  sRow: 3,
+  eRow: 202,
+  folderWebUrls: sortedWebUrls22,
 });
 
 /// Only used for filenames that contains '(number)'
