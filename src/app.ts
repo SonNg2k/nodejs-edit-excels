@@ -1,7 +1,5 @@
 import { CellHyperlinkValue, Workbook } from "exceljs";
-import folders20 from "./cloud-storage-folders/2020-folders.json";
-import folders21 from "./cloud-storage-folders/2021-folders.json";
-import folders22 from "./cloud-storage-folders/2022-folders.json";
+// import driveFolders from "./json/driveFolders.json";
 
 async function migrateToOneDrive(args: {
   bookName: string;
@@ -27,44 +25,20 @@ async function migrateToOneDrive(args: {
   console.log(`Migration for ${args.bookName} is complete ✅`);
 }
 
-migrateToOneDrive({
-  bookName: "2020 Customers.xlsx",
-  sheetName: "2020",
-  col: "M",
-  sRow: 3,
-  eRow: 108,
-  folderWebUrls: folders20.files.map((folderInfo) => folderInfo.webViewLink),
-});
-
-const sortedWebUrls21 = folders21.files
-  .sort(
-    (a, b) =>
-      extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
-  )
-  .map((folderInfo) => folderInfo.webViewLink);
-migrateToOneDrive({
-  bookName: "2021 Customers.xlsx",
-  sheetName: "2021",
-  col: "L",
-  sRow: 3,
-  eRow: 262,
-  folderWebUrls: sortedWebUrls21,
-});
-
-const sortedWebUrls22 = folders22.files
-  .sort(
-    (a, b) =>
-      extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
-  )
-  .map((folderInfo) => folderInfo.webViewLink);
-migrateToOneDrive({
-  bookName: "2022 Customers.xlsx",
-  sheetName: "2022",
-  col: "K",
-  sRow: 3,
-  eRow: 202,
-  folderWebUrls: sortedWebUrls22,
-});
+// const folderListSortedByName = driveFolders.files
+//   .sort(
+//     (a, b) =>
+//       extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+//   )
+//   .map((folderInfo) => folderInfo.webViewLink);
+// migrateToOneDrive({
+//   bookName: "2022 — Quản lí khách hàng.xlsx",
+//   sheetName: "2022",
+//   col: "K",
+//   sRow: 3,
+//   eRow: 498,
+//   folderWebUrls: folderListSortedByName,
+// });
 
 /// Only used for filenames that contains '(number)'
 function extractNumberFromFilename(filename: string): number {
