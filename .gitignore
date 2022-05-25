@@ -1,7 +1,7 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,node,microsoftoffice
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,node,microsoftoffice
-
+json/
 ### macOS ###
 # General
 .DS_Store
@@ -46,6 +46,7 @@ Backup of *.doc*
 
 # Excel temporary
 ~$*.xls*
+excels/
 
 # Excel Backup File
 *.xlk
