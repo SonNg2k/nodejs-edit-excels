@@ -1,6 +1,6 @@
 import {CellHyperlinkValue, Workbook} from "exceljs";
 
-// import driveFolders from "./json/driveFolders.json";
+import driveFolders from "./json/driveFolders.json";
 
 interface MigrateToOneDriveParams {
   bookFileName: string;
@@ -28,22 +28,24 @@ async function migrateToOneDrive(args: MigrateToOneDriveParams) {
   console.log(`Migration for ${bookFileName} is complete ✅`);
 }
 
-// const folderListSortedByName = driveFolders.files
-//   .sort(
-//     (a, b) =>
-//       extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
-//   )
-//   .map((folderInfo) => folderInfo.webViewLink);
-// migrateToOneDrive({
-//   bookName: "2022 — Quản lí khách hàng.xlsx",
-//   sheetName: "2022",
-//   col: "K",
-//   sRow: 3,
-//   eRow: 498,
-//   folderWebUrls: folderListSortedByName,
-// });
+console.log('Number of folders on Google Drive: ', driveFolders.files.length)
 
-/// Only used for filenames that contains '(number)'
+// const folderListSortedByName = driveFolders.files
+// .sort(
+//   (a, b) =>
+//     extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+// )
+// .map((folderInfo) => folderInfo.webViewLink);
+// migrateToOneDrive({
+//   bookFileName: "2022 — Quản lí khách hàng.xlsx",
+//   sheetName: "2022",
+//   linkColId: "K",
+//   sRow: 3,
+//   eRow: 802,
+//   folderWebUrls: folderListSortedByName,
+// }).then(_ => null);
+
+/// Only used for filenames that end with the substring '(number)'
 function extractNumberFromFilename(filename: string): number {
   const startIdx = filename.indexOf("(") + 1;
   const endIdx = filename.indexOf(")");
