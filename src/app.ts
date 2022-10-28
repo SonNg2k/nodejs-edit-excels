@@ -1,4 +1,5 @@
-import { CellHyperlinkValue, Workbook } from "exceljs";
+import {Workbook} from "exceljs";
+
 // import driveFolders from "./json/driveFolders.json";
 
 async function migrateToOneDrive(args: {
@@ -15,11 +16,10 @@ async function migrateToOneDrive(args: {
 
   for (let rowNth = args.sRow; rowNth <= args.eRow; rowNth++) {
     const cell = worksheet.getCell(args.col + rowNth);
-    const newCellValue: CellHyperlinkValue = {
+    cell.value = {
       text: "Link " + (rowNth - args.sRow + 1),
       hyperlink: args.folderWebUrls[rowNth - args.sRow],
     };
-    cell.value = newCellValue;
   }
   await workbook.xlsx.writeFile(`../excels/${args.bookName}`);
   console.log(`Migration for ${args.bookName} is complete ✅`);
