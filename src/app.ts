@@ -1,28 +1,31 @@
-import {Workbook} from "exceljs";
+import {CellHyperlinkValue, Workbook} from "exceljs";
 
 // import driveFolders from "./json/driveFolders.json";
 
-async function migrateToOneDrive(args: {
-  bookName: string;
+interface MigrateToOneDriveParams {
+  bookFileName: string;
   sheetName: string;
-  col: string;
+  linkColId: string;
   sRow: number;
   eRow: number;
   folderWebUrls: Array<string>;
-}) {
-  const workbook = new Workbook();
-  await workbook.xlsx.readFile(`../excels/${args.bookName}`);
-  const worksheet = workbook.getWorksheet(args.sheetName);
+}
 
-  for (let rowNth = args.sRow; rowNth <= args.eRow; rowNth++) {
-    const cell = worksheet.getCell(args.col + rowNth);
+async function migrateToOneDrive(args: MigrateToOneDriveParams) {
+  const {bookFileName, sheetName, linkColId, sRow, eRow, folderWebUrls} = args
+  const workbook = new Workbook();
+  await workbook.xlsx.readFile(`../excels/${bookFileName}`);
+  const worksheet = workbook.getWorksheet(sheetName);
+
+  for (let rowNth = sRow; rowNth <= eRow; rowNth++) {
+    const cell = worksheet.getCell(linkColId + rowNth);
     cell.value = {
-      text: "Link " + (rowNth - args.sRow + 1),
-      hyperlink: args.folderWebUrls[rowNth - args.sRow],
-    };
+      text: "Link " + (rowNth - sRow + 1),
+      hyperlink: folderWebUrls[rowNth - sRow],
+    } as CellHyperlinkValue
   }
-  await workbook.xlsx.writeFile(`../excels/${args.bookName}`);
-  console.log(`Migration for ${args.bookName} is complete ✅`);
+  await workbook.xlsx.writeFile(`../excels/${bookFileName}`);
+  console.log(`Migration for ${bookFileName} is complete ✅`);
 }
 
 // const folderListSortedByName = driveFolders.files
