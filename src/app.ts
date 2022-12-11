@@ -30,20 +30,20 @@ async function migrateToOneDrive(args: MigrateToOneDriveParams) {
 
 console.log('Number of folders on Google Drive: ', driveFolders.files.length)
 
-// const folderListSortedByName = driveFolders.files
-// .sort(
-//   (a, b) =>
-//     extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
-// )
-// .map((folderInfo) => folderInfo.webViewLink);
-// migrateToOneDrive({
-//   bookFileName: "2022 — Quản lí khách hàng.xlsx",
-//   sheetName: "2022",
-//   linkColId: "K",
-//   sRow: 3,
-//   eRow: 802,
-//   folderWebUrls: folderListSortedByName,
-// }).then(_ => null);
+const folderListSortedByName = driveFolders.files
+.sort(
+  (a, b) =>
+    extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+)
+.map((folderInfo) => folderInfo.webViewLink);
+migrateToOneDrive({
+  bookFileName: "2023 — Quản lý Khách hàng (HN).xlsx",
+  sheetName: "Sheet",
+  linkColId: "J",
+  sRow: 4,
+  eRow: 203,
+  folderWebUrls: folderListSortedByName,
+}).then(_ => null);
 
 /// Only used for filenames that end with the substring '(number)'
 function extractNumberFromFilename(filename: string): number {
