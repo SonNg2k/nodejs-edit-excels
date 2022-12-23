@@ -5,11 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "rimraf lib",
+    "prebuild": "rimraf build",
     "build": "tsc -w",
     "precreateFolders": "rimraf generated_folders && mkdirp generated_folders",
-    "createFolders": "cd lib && node createFolders.js",
-    "start": "cd lib && node app.js"
+    "createFolders": "cd build && node createFolders.js",
+    "start": "cd build && node app.js"
   },
   "keywords": [],
   "author": "",
