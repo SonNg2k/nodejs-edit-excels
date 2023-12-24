@@ -28,7 +28,7 @@ class FileError extends Error {
     readonly name = 'FileError'
 }
 
-type EditExcelFnParams = Config
+type EditExcelFnParams = Pick<Config, 'bookFileName' | 'sheetName' | 'linkColId' | 'sRow' | 'eRow'>
     &
     {
         folderWebUrls: Array<string>

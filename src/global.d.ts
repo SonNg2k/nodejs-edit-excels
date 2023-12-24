@@ -5,5 +5,7 @@ namespace NodeJS {
         LINK_COL_ID?: string;
         S_ROW?: number;
         E_ROW?: number
+        N_FOLDERS?: number
+        FOLDER_PREFIX?: string
     }
 }
