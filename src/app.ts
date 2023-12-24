@@ -1,66 +1,74 @@
-import {CellHyperlinkValue, Workbook} from "exceljs";
+import config, {Config} from '@app/config'
+import {CellHyperlinkValue, Workbook} from 'exceljs'
 
-import driveFolders from "./json/driveFolders.json";
+import driveFolders from './json/driveFolders.json'
 
-interface MigrateToOneDriveParams {
-  bookFileName: string;
-  sheetName: string;
-  linkColId: string;
-  sRow: number;
-  eRow: number;
-  folderWebUrls: Array<string>;
-}
-
-async function migrateToOneDrive(args: MigrateToOneDriveParams) {
-  const {bookFileName, sheetName, linkColId, sRow, eRow, folderWebUrls} = args
-  const workbook = new Workbook();
-  await workbook.xlsx.readFile(`../excels/${bookFileName}`);
-  const worksheet = workbook.getWorksheet(sheetName);
-
-  for (let rowNth = sRow; rowNth <= eRow; rowNth++) {
-    const cell = worksheet.getCell(linkColId + rowNth);
-    cell.value = {
-      text: "Link " + (rowNth - sRow + 1),
-      hyperlink: folderWebUrls[rowNth - sRow],
-    } as CellHyperlinkValue
-  }
-  await workbook.xlsx.writeFile(`../excels/${bookFileName}`);
-  console.log(`Migration for ${bookFileName} is complete ✅`);
-}
+import 'dotenv/config'
 
 console.log('Number of folders on Google Drive: ', driveFolders.files.length)
 
 const folderListSortedByName = driveFolders.files
-.sort(
-  (a, b) =>
-    extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
+.toSorted(
+    (a, b) =>
+        extractNumberFromFilename(a.name) - extractNumberFromFilename(b.name)
 )
-.map((folderInfo) => folderInfo.webViewLink);
-migrateToOneDrive({
-  bookFileName: "2023 — Quản lý Khách hàng (HN).xlsx",
-  sheetName: "Sheet",
-  linkColId: "J",
-  sRow: 4,
-  eRow: 203,
-  folderWebUrls: folderListSortedByName,
-}).then(_ => null);
+.map((folderInfo) => folderInfo.webViewLink)
 
-/// Only used for filenames that end with the substring '(number)'
-function extractNumberFromFilename(filename: string): number {
-  const startIdx = filename.indexOf("(") + 1;
-  const endIdx = filename.indexOf(")");
-  const parsed = parseInt(filename.substring(startIdx, endIdx), 10);
-  if (isNaN(parsed)) return -1;
-  return parsed;
+const {bookFileName, sheetName, linkColId, sRow, eRow} = config
+editExcel({
+    folderWebUrls: folderListSortedByName,
+    bookFileName,
+    sheetName,
+    linkColId,
+    sRow,
+    eRow
+}).then(_ => null)
+
+class FileError extends Error {
+    readonly name = 'FileError'
 }
 
-// import { readFile, utils, writeFile } from "xlsx";
-// const workbook2020 = readFile("../excels/2020-customers.xlsx", {
-//   cellStyles: true,
-// });
-// const worksheet2020 = workbook2020.Sheets["2020"];
+type EditExcelFnParams = Config
+    &
+    {
+        folderWebUrls: Array<string>
+    }
 
-// utils.sheet_add_aoa(worksheet2020, [["test"]], { origin: "M3" });
-// writeFile(workbook2020, "../excels/2020-customers.xlsx", { cellStyles: true });
+/**
+ * @throws FileError
+ * */
+async function editExcel(args: EditExcelFnParams) {
+    const {bookFileName, sheetName, linkColId, sRow, eRow, folderWebUrls} = args
+    const filePath = `../excels/${bookFileName}`
+    const workbook = new Workbook()
+    await workbook.xlsx.readFile(filePath)
+    const worksheet = workbook.getWorksheet(sheetName)
 
-// console.log(JSON.stringify(workbook2020.SheetNames, null, 2));
+    if (!worksheet) {
+        throw new FileError(`The Excel worksheet file ${filePath} is not found`)
+    }
+
+    for (let rowNth = sRow; rowNth <= eRow; rowNth++) {
+        const cell = worksheet.getCell(linkColId + rowNth)
+        cell.value = {
+            text: 'Link ' + (rowNth - sRow + 1),
+            hyperlink: folderWebUrls[rowNth - sRow]
+        } as CellHyperlinkValue
+    }
+    await workbook.xlsx.writeFile(`../excels/${bookFileName}`)
+    console.log(`Migration for ${bookFileName} is complete ✅`)
+}
+
+/**
+ * Only used for filenames that include the substring '(<number>)'
+ * @throws FileError
+ * */
+function extractNumberFromFilename(filename: string): number {
+    const startIdx = filename.indexOf('(') + 1
+    const endIdx = filename.indexOf(')')
+    const parsed = parseInt(filename.substring(startIdx, endIdx), 10)
+    if (isNaN(parsed)) {
+        throw new FileError('File name is not valid, must contain the substring \'(<number>)\'')
+    }
+    return parsed
+}
