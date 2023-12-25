@@ -2,6 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,node,microsoftoffice
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,node,microsoftoffice
 json/
+.idea
 ### macOS ###
 # General
 .DS_Store
@@ -106,7 +107,7 @@ jspm_packages/
 web_modules/
 
 # TypeScript
-lib/
+build/
 *.tsbuildinfo
 
 # Optional npm cache directory
