@@ -1,9 +1,7 @@
-import config, {Config} from '@app/config'
 import {CellHyperlinkValue, Workbook} from 'exceljs'
+import config, {Config} from './config'
 
 import driveFolders from './json/driveFolders.json'
-
-import 'dotenv/config'
 
 console.log('Number of folders on Google Drive: ', driveFolders.files.length)
 
@@ -56,7 +54,7 @@ async function editExcel(args: EditExcelFnParams) {
         } as CellHyperlinkValue
     }
     await workbook.xlsx.writeFile(`../excels/${bookFileName}`)
-    console.log(`Migration for ${bookFileName} is complete ✅`)
+    console.log(`${bookFileName} is edited successfully ✅`)
 }
 
 /**

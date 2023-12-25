@@ -1,5 +1,5 @@
-import config from '@app/config'
 import {mkdir} from 'fs/promises'
+import config from './config'
 
 const {nFolders, folderPrefix} = config
 
@@ -12,5 +12,5 @@ async function run(nFolders: number) {
         await mkdir(prefixDir)
         await Promise.all([mkdir(`${prefixDir}/Trước`), mkdir(`${prefixDir}/Sau`), mkdir(`${prefixDir}/Tái khám`)])
     }
-    console.log(`✅ Done created ${nFolders} folders`)
+    console.log(`${nFolders} folders are created successfully ✅`)
 }

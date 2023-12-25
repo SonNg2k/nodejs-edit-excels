@@ -1,17 +1,15 @@
 {
+  "type": "module",
   // See the TSConfig Bases here: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#tsconfig-bases
   "compilerOptions": {
+    // override the default libs injected by 'target'
     "lib": [
       "ESNext"
     ],
-    // override the default libs injected by 'target'
-    "target": "ESNext",
-    "module": "Node16",
-    "moduleResolution": "Node",
+    "module": "NodeNext",
     // "resolveJsonModule" cannot be specified without "node" module resolution strategy
     "resolveJsonModule": true,
     // *.json files you want to import need to be inside of "rootDir"
-    "esModuleInterop": true,
     // without this, u have to do st like: import * as functions from "firebase-functions"
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -23,13 +21,7 @@
 
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@app/*": [
-        "src/*"
-      ]
-    },
+    "rootDir": "./src",
     "outDir": "build",
     "sourceMap": true
   },

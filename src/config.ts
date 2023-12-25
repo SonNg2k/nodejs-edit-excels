@@ -1,5 +1,13 @@
 import * as process from 'process'
 
+class ConfigError extends Error {
+    readonly name = 'ConfigError'
+}
+
+function createConfigError(key: string): ConfigError {
+    return new ConfigError(`❌ Missing environment variable ${key} in process.env`)
+}
+
 export interface Config {
     bookFileName: string,
     sheetName: string,
@@ -53,11 +61,3 @@ function getConfig(): Config {
 }
 
 export default getConfig()
-
-class ConfigError extends Error {
-    readonly name = 'ConfigError'
-}
-
-function createConfigError(key: string): ConfigError {
-    return new ConfigError(`Missing environment variable ${key} in process.env`)
-}
