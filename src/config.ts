@@ -12,8 +12,8 @@ export interface Config {
     bookFileName: string,
     sheetName: string,
     linkColId: string,
-    sRow: number,
-    eRow: number
+    sRowId: number,
+    eRowId: number
     nFolders: number
     folderPrefix: string
 }
@@ -33,12 +33,12 @@ function getConfig(): Config {
         throw createConfigError('LINK_COL_ID')
     }
 
-    if (!env['S_ROW']) {
-        throw createConfigError('S_ROW')
+    if (!env['S_ROW_ID']) {
+        throw createConfigError('S_ROW_ID')
     }
 
-    if (!env['E_ROW']) {
-        throw createConfigError('E_ROW')
+    if (!env['E_ROW_ID']) {
+        throw createConfigError('E_ROW_ID')
     }
 
     if (!env['N_FOLDERS']) {
@@ -53,8 +53,8 @@ function getConfig(): Config {
         bookFileName: env.BOOK_FILE_NAME,
         sheetName: env.SHEET_NAME,
         linkColId: env.LINK_COL_ID,
-        sRow: env.S_ROW,
-        eRow: env.E_ROW,
+        sRowId: env.S_ROW_ID,
+        eRowId: env.E_ROW_ID,
         nFolders: env.N_FOLDERS,
         folderPrefix: env.FOLDER_PREFIX
     })

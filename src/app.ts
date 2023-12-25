@@ -1,3 +1,4 @@
+import * as console from 'console'
 import {CellHyperlinkValue, Workbook} from 'exceljs'
 import config, {Config} from './config'
 
@@ -12,21 +13,21 @@ const folderListSortedByName = driveFolders.files
 )
 .map((folderInfo) => folderInfo.webViewLink)
 
-const {bookFileName, sheetName, linkColId, sRow, eRow} = config
+const {bookFileName, sheetName, linkColId, sRowId, eRowId} = config
 editExcel({
     folderWebUrls: folderListSortedByName,
     bookFileName,
     sheetName,
     linkColId,
-    sRow,
-    eRow
+    sRowId,
+    eRowId
 }).then(_ => null)
 
 class FileError extends Error {
     readonly name = 'FileError'
 }
 
-type EditExcelFnParams = Pick<Config, 'bookFileName' | 'sheetName' | 'linkColId' | 'sRow' | 'eRow'>
+type EditExcelFnParams = Pick<Config, 'bookFileName' | 'sheetName' | 'linkColId' | 'sRowId' | 'eRowId'>
     &
     {
         folderWebUrls: Array<string>
@@ -36,21 +37,21 @@ type EditExcelFnParams = Pick<Config, 'bookFileName' | 'sheetName' | 'linkColId'
  * @throws FileError
  * */
 async function editExcel(args: EditExcelFnParams) {
-    const {bookFileName, sheetName, linkColId, sRow, eRow, folderWebUrls} = args
+    const {bookFileName, sheetName, linkColId, sRowId, eRowId, folderWebUrls} = args
     const filePath = `../excels/${bookFileName}`
     const workbook = new Workbook()
     await workbook.xlsx.readFile(filePath)
     const worksheet = workbook.getWorksheet(sheetName)
 
     if (!worksheet) {
-        throw new FileError(`The Excel worksheet file ${filePath} is not found`)
+        throw new FileError(`❌ The Excel worksheet is not found`)
     }
 
-    for (let rowNth = sRow; rowNth <= eRow; rowNth++) {
+    for (let rowNth = sRowId; rowNth <= eRowId; rowNth++) {
         const cell = worksheet.getCell(linkColId + rowNth)
         cell.value = {
-            text: 'Link ' + (rowNth - sRow + 1),
-            hyperlink: folderWebUrls[rowNth - sRow]
+            text: 'Link ' + (rowNth - sRowId + 1),
+            hyperlink: folderWebUrls[rowNth - sRowId]
         } as CellHyperlinkValue
     }
     await workbook.xlsx.writeFile(`../excels/${bookFileName}`)
