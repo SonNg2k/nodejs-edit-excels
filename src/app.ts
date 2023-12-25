@@ -55,7 +55,7 @@ async function editExcel(args: EditExcelFnParams) {
         } as CellHyperlinkValue
     }
     await workbook.xlsx.writeFile(`../excels/${bookFileName}`)
-    console.log(`${bookFileName} is edited successfully ✅`)
+    console.log(`"${bookFileName}" is edited successfully ✅`)
 }
 
 /**
