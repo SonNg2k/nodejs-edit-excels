@@ -5,11 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm prebuild && tsc -w",
-    "precreateFolders": "rimraf generated_folders && mkdirp generated_folders",
-    "createFolders": "pnpm precreateFolders && cd build/ && node -r dotenv/config createFolders.js dotenv_config_path=../.env",
     "prebuild": "rimraf build",
-    "start": "cd build/ && node -r dotenv/config app.js dotenv_config_path=../.env"
+    "build": "pnpm prebuild && tsc -w",
+    "start": "cd build/ && node -r dotenv/config app.js dotenv_config_path=../.env",
+    "precreateFolders": "rimraf generated_folders && mkdirp generated_folders",
+    "createFolders": "pnpm precreateFolders && cd build/ && node -r dotenv/config createFolders.js dotenv_config_path=../.env"
   },
   "keywords": [],
   "author": "",
