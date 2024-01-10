@@ -1,8 +1,8 @@
 import * as console from 'console'
 import {CellHyperlinkValue, Workbook} from 'exceljs'
-import config, {Config} from './config'
 
-import driveFolders from './json/driveFolders.json'
+import driveFolders from '../json/driveFolders.json'
+import config, {Config} from './config'
 
 console.log('Number of folders on Google Drive: ', driveFolders.files.length)
 
@@ -63,11 +63,9 @@ async function editExcel(args: EditExcelFnParams) {
  * @throws FileError
  * */
 function extractNumberFromFilename(filename: string): number {
-    const startIdx = filename.indexOf('(') + 1
-    const endIdx = filename.indexOf(')')
-    const parsed = parseInt(filename.substring(startIdx, endIdx), 10)
+    const parsed = parseInt(filename.substring(filename.lastIndexOf('_') + 1), 10)
     if (isNaN(parsed)) {
-        throw new FileError('File name is not valid, must contain the substring \'(<number>)\'')
+        throw new FileError('File name is not valid, must contain the substring \'_<number>\'')
     }
     return parsed
 }
